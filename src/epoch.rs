@@ -5,93 +5,93 @@ use bitcoin::blockdata::constants::COIN_VALUE;
 pub(crate) struct Epoch(pub(crate) u32);
 
 impl Epoch {
-  pub(crate) const STARTING_SATS: [Sat; 7] = [
-    Sat(0 * COIN_VALUE as u64),
-    Sat(120000000000 * COIN_VALUE as u64),
-    Sat(216000000000 * COIN_VALUE as u64),
-    Sat(280800000000 * COIN_VALUE as u64),
-    Sat(319680000000 * COIN_VALUE as u64),
-    Sat(343728000000 * COIN_VALUE as u64),
-    Sat(360491520000 * COIN_VALUE as u64),
-  ];
+    pub(crate) const STARTING_SATS: [Sat; 7] = [
+        Sat(0 * COIN_VALUE as u64),
+        Sat(120000000000 * COIN_VALUE as u64),
+        Sat(216000000000 * COIN_VALUE as u64),
+        Sat(280800000000 * COIN_VALUE as u64),
+        Sat(319680000000 * COIN_VALUE as u64),
+        Sat(343728000000 * COIN_VALUE as u64),
+        Sat(360491520000 * COIN_VALUE as u64),
+    ];
 
-  pub(crate) fn subsidy(self) -> u64 {
-    match self.0 {
-        0 => 12_000 * COIN_VALUE,
-        1 => 6_000 * COIN_VALUE,
-        2 => 3_000 * COIN_VALUE,
-        3 => 1_500 * COIN_VALUE,
-        4 => 750 * COIN_VALUE,
-        5 => 375 * COIN_VALUE,
-        6 => 100 * COIN_VALUE, // Constant inflation starts at epoch 6
-        _ => panic!("bad epoch"),
+    pub(crate) fn subsidy(self) -> u64 {
+        match self.0 {
+            0 => 8_000 * COIN_VALUE,
+            1 => 4_000 * COIN_VALUE,
+            2 => 2_000 * COIN_VALUE,
+            3 => 1_000 * COIN_VALUE,
+            4 => 500 * COIN_VALUE,
+            5 => 250 * COIN_VALUE,
+            6 => 125 * COIN_VALUE, // Constant inflation starts at epoch 6
+            _ => panic!("bad epoch"),
+        }
     }
-  }
 
-  pub(crate) fn starting_sat(self) -> Sat {
-    *Self::STARTING_SATS
-      .get(usize::try_from(self.0).unwrap())
-      .unwrap_or_else(|| Self::STARTING_SATS.last().unwrap())
-  }
-
-  pub(crate) fn starting_height(self) -> Height {
-    match self.0 {
-        0 => Height(0),
-        1 => Height(432_000),
-        2 => Height(1_261_440),
-        3 => Height(2_102_400),
-        4 => Height(3_150_528),
-        5 => Height(4_500_000),
-        6 => Height(5_000_000), // After 5,000,000, subsidy becomes constant
-        _ => panic!("bad epoch"),
+    pub(crate) fn starting_sat(self) -> Sat {
+        *Self::STARTING_SATS
+            .get(usize::try_from(self.0).unwrap())
+            .unwrap_or_else(|| Self::STARTING_SATS.last().unwrap())
     }
-  }
+
+    pub(crate) fn starting_height(self) -> Height {
+        match self.0 {
+            0 => Height(0),
+            1 => Height(432_000),
+            2 => Height(1_261_440),
+            3 => Height(2_102_400),
+            4 => Height(3_150_528),
+            5 => Height(4_500_000),
+            6 => Height(5_000_000), // After 5,000,000, subsidy becomes constant
+            _ => panic!("bad epoch"),
+        }
+    }
 }
 
 impl PartialEq<u32> for Epoch {
-  fn eq(&self, other: &u32) -> bool {
-    self.0 == *other
-  }
+    fn eq(&self, other: &u32) -> bool {
+        self.0 == *other
+    }
 }
 
 impl From<Sat> for Epoch {
-  fn from(sat: Sat) -> Self {
-    if sat < Self::STARTING_SATS[1] {
-      Epoch(0)
-    } else if sat < Self::STARTING_SATS[2] {
-      Epoch(1)
-    } else if sat < Self::STARTING_SATS[3] {
-      Epoch(2)
-    } else if sat < Self::STARTING_SATS[4] {
-      Epoch(3)
-    } else if sat < Self::STARTING_SATS[5] {
-      Epoch(4)
-    } else if sat < Self::STARTING_SATS[6] {
-      Epoch(5)
-    } else {
-      Epoch(6)
+    fn from(sat: Sat) -> Self {
+        if sat < Self::STARTING_SATS[1] {
+            Epoch(0)
+        } else if sat < Self::STARTING_SATS[2] {
+            Epoch(1)
+        } else if sat < Self::STARTING_SATS[3] {
+            Epoch(2)
+        } else if sat < Self::STARTING_SATS[4] {
+            Epoch(3)
+        } else if sat < Self::STARTING_SATS[5] {
+            Epoch(4)
+        } else if sat < Self::STARTING_SATS[6] {
+            Epoch(5)
+        } else {
+            Epoch(6)
+        }
     }
-  }
 }
 
 impl From<Height> for Epoch {
-  fn from(height: Height) -> Self {
-    if height.0 < 432_000 {
-      Epoch(0)
-    } else if height.0 < 1_261_440 {
-      Epoch(1)
-    } else if height.0 < 2_102_400 {
-      Epoch(2)
-    } else if height.0 < 3_150_528 {
-      Epoch(3)
-    } else if height.0 < 4_500_000 {
-      Epoch(4)
-    } else if height.0 < 5_000_000 {
-      Epoch(5)
-    } else {
-      Epoch(6)
+    fn from(height: Height) -> Self {
+        if height.0 < 432_000 {
+            Epoch(0)
+        } else if height.0 < 1_261_440 {
+            Epoch(1)
+        } else if height.0 < 2_102_400 {
+            Epoch(2)
+        } else if height.0 < 3_150_528 {
+            Epoch(3)
+        } else if height.0 < 4_500_000 {
+            Epoch(4)
+        } else if height.0 < 5_000_000 {
+            Epoch(5)
+        } else {
+            Epoch(6)
+        }
     }
-  }
 }
 
 #[cfg(test)]
@@ -105,9 +105,9 @@ mod tests {
 
     #[test]
     fn subsidy() {
-        assert_eq!(Epoch(0).subsidy(), 12_000 * COIN_VALUE);
-        assert_eq!(Epoch(1).subsidy(), 6_000 * COIN_VALUE);
-        assert_eq!(Epoch(6).subsidy(), 100 * COIN_VALUE); // Constant inflation
+        assert_eq!(Epoch(0).subsidy(), 8_000 * COIN_VALUE);
+        assert_eq!(Epoch(1).subsidy(), 4_000 * COIN_VALUE);
+        assert_eq!(Epoch(6).subsidy(), 125 * COIN_VALUE); // Constant inflation
     }
 
     #[test]
