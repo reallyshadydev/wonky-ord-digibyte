@@ -6,14 +6,14 @@ pub(crate) struct Epoch(pub(crate) u32);
 
 impl Epoch {
     pub(crate) const STARTING_SATS: [Sat; 8] = [
-        Sat(0 * COIN_VALUE as u64),
-        Sat(8000000000000 * COIN_VALUE as u64), // Epoch 1: 8,000 coins per block
-        Sat(16000000000000 * COIN_VALUE as u64), // Epoch 2
-        Sat(24000000000000 * COIN_VALUE as u64), // Epoch 3
-        Sat(32000000000000 * COIN_VALUE as u64), // Epoch 4
-        Sat(40000000000000 * COIN_VALUE as u64), // Epoch 5
-        Sat(48000000000000 * COIN_VALUE as u64), // Epoch 6
-        Sat(56000000000000 * COIN_VALUE as u64), // Constant inflation
+        Sat(0),
+        Sat(8_000_000_000_000), // Epoch 1: 8,000 coins per block
+        Sat(16_000_000_000_000), // Epoch 2
+        Sat(24_000_000_000_000), // Epoch 3
+        Sat(32_000_000_000_000), // Epoch 4
+        Sat(40_000_000_000_000), // Epoch 5
+        Sat(48_000_000_000_000), // Epoch 6
+        Sat(56_000_000_000_000), // Constant inflation
     ];
 
     pub(crate) fn subsidy(self) -> u64 {
