@@ -1,6 +1,6 @@
 # DigiByte Ordinals Indexer
 
-ℹ️ This is a fork adapted for DigiByte blockchain.
+ℹ️ This is a fork adapted for DigiByte blockchain from [reallyshadydev/wonky-ord-digibyte](https://github.com/reallyshadydev/wonky-ord-digibyte)
 
 ## Prerequisites
 You will need to launch your own DigiByte node and have it fully synced. Follow these steps to set up:
@@ -14,6 +14,19 @@ You will need to launch your own DigiByte node and have it fully synced. Follow 
    ```
    - Make sure your DigiByte node is fully synced before starting the indexer
    - ‼️ **IMPORTANT**: Replace `your_username` and `your_password` with secure credentials
+
+## Building the Indexer
+
+1. Clone the repository:
+```shell
+git clone https://github.com/reallyshadydev/wonky-ord-digibyte.git
+cd wonky-ord-digibyte
+```
+
+2. Build the release version:
+```shell
+cargo build --release
+```
 
 ## Running the Indexer
 
@@ -63,3 +76,20 @@ docker compose down
 ## Storage Requirements
 
 The database size will depend on the indexing options enabled and the current blockchain size. Make sure you have adequate storage space available.
+
+## API Documentation
+
+You can find the API documentation in the [openapi.yaml](https://github.com/reallyshadydev/wonky-ord-digibyte/blob/master/openapi.yaml) file. 
+The most convenient way to view the API documentation is to use the [Swagger Editor](https://editor.swagger.io/).
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under [CC0-1.0 license](https://github.com/reallyshadydev/wonky-ord-digibyte/blob/master/LICENSE)
+
+## Repository
+
+For more information, source code, and updates, visit the [GitHub repository](https://github.com/reallyshadydev/wonky-ord-digibyte).
