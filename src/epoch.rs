@@ -5,26 +5,27 @@ use bitcoin::blockdata::constants::COIN_VALUE;
 pub(crate) struct Epoch(pub(crate) u32);
 
 impl Epoch {
-    pub(crate) const STARTING_SATS: [Sat; 7] = [
+    pub(crate) const STARTING_SATS: [Sat; 8] = [
         Sat(0 * COIN_VALUE as u64),
-        Sat(120000000000 * COIN_VALUE as u64),
-        Sat(216000000000 * COIN_VALUE as u64),
-        Sat(280800000000 * COIN_VALUE as u64),
-        Sat(319680000000 * COIN_VALUE as u64),
-        Sat(343728000000 * COIN_VALUE as u64),
-        Sat(360491520000 * COIN_VALUE as u64),
+        Sat(8000000000000 * COIN_VALUE as u64), // Epoch 1: 8,000 coins per block
+        Sat(16000000000000 * COIN_VALUE as u64), // Epoch 2
+        Sat(24000000000000 * COIN_VALUE as u64), // Epoch 3
+        Sat(32000000000000 * COIN_VALUE as u64), // Epoch 4
+        Sat(40000000000000 * COIN_VALUE as u64), // Epoch 5
+        Sat(48000000000000 * COIN_VALUE as u64), // Epoch 6
+        Sat(56000000000000 * COIN_VALUE as u64), // Constant inflation
     ];
 
     pub(crate) fn subsidy(self) -> u64 {
         match self.0 {
-            0 => 8_000 * COIN_VALUE,
+            0 => 8_000 * COIN_VALUE, // Initial subsidy
             1 => 4_000 * COIN_VALUE,
             2 => 2_000 * COIN_VALUE,
             3 => 1_000 * COIN_VALUE,
             4 => 500 * COIN_VALUE,
             5 => 250 * COIN_VALUE,
-            6 => 125 * COIN_VALUE, // Constant inflation starts at epoch 6
-            _ => panic!("bad epoch"),
+            6 => 125 * COIN_VALUE, // Reduced inflation starts at epoch 6
+            _ => 125 * COIN_VALUE, // Constant inflation beyond epoch 6
         }
     }
 
@@ -37,13 +38,13 @@ impl Epoch {
     pub(crate) fn starting_height(self) -> Height {
         match self.0 {
             0 => Height(0),
-            1 => Height(432_000),
-            2 => Height(1_261_440),
-            3 => Height(2_102_400),
-            4 => Height(3_150_528),
-            5 => Height(4_500_000),
-            6 => Height(5_000_000), // After 5,000,000, subsidy becomes constant
-            _ => panic!("bad epoch"),
+            1 => Height(100_000),
+            2 => Height(200_000),
+            3 => Height(300_000),
+            4 => Height(400_000),
+            5 => Height(500_000),
+            6 => Height(600_000), // Constant inflation starts after 600,000
+            _ => panic!("Invalid epoch"),
         }
     }
 }
@@ -76,17 +77,17 @@ impl From<Sat> for Epoch {
 
 impl From<Height> for Epoch {
     fn from(height: Height) -> Self {
-        if height.0 < 432_000 {
+        if height.0 < 100_000 {
             Epoch(0)
-        } else if height.0 < 1_261_440 {
+        } else if height.0 < 200_000 {
             Epoch(1)
-        } else if height.0 < 2_102_400 {
+        } else if height.0 < 300_000 {
             Epoch(2)
-        } else if height.0 < 3_150_528 {
+        } else if height.0 < 400_000 {
             Epoch(3)
-        } else if height.0 < 4_500_000 {
+        } else if height.0 < 500_000 {
             Epoch(4)
-        } else if height.0 < 5_000_000 {
+        } else if height.0 < 600_000 {
             Epoch(5)
         } else {
             Epoch(6)
@@ -113,15 +114,15 @@ mod tests {
     #[test]
     fn starting_height() {
         assert_eq!(Epoch(0).starting_height(), Height(0));
-        assert_eq!(Epoch(1).starting_height(), Height(432_000));
-        assert_eq!(Epoch(2).starting_height(), Height(1_261_440));
+        assert_eq!(Epoch(1).starting_height(), Height(100_000));
+        assert_eq!(Epoch(2).starting_height(), Height(200_000));
     }
 
     #[test]
     fn from_height() {
         assert_eq!(Epoch::from(Height(0)), Epoch(0));
-        assert_eq!(Epoch::from(Height(432_000)), Epoch(1));
-        assert_eq!(Epoch::from(Height(1_261_440)), Epoch(2));
+        assert_eq!(Epoch::from(Height(100_000)), Epoch(1));
+        assert_eq!(Epoch::from(Height(200_000)), Epoch(2));
     }
 
     #[test]
