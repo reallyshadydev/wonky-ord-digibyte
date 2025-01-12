@@ -1,4 +1,4 @@
-# DigiByte Ordinals Indexer
+# DigiByte Ordinals Indexer MAY STILL HAVE BUGS
 
 ℹ️ This is a fork adapted for DigiByte blockchain from [reallyshadydev/wonky-ord-digibyte](https://github.com/reallyshadydev/wonky-ord-digibyte)
 
